@@ -112,31 +112,34 @@ def import_roadnet_files2(fname, fnum, outfile):
                 for line in lines:      
                     i = i + 1
                     substr_le = 'LE_ID="ug1"'       
-                    le11 = re.search(substr_le, line)
-                    #print(le11)
-                    substr_le = 'LE_ID="UG1"'
-                    le12 = re.search(substr_le, line)
+                    le1 = re.search(substr_le, line, re.IGNORECASE)
                     substr_le = 'LE_ID="mz1"'       
-                    le21 = re.search(substr_le, line)
-                    substr_le = 'LE_ID="MZ1"'
-                    le22 = re.search(substr_le, line)                    
+                    le2 = re.search(substr_le, line, re.IGNORECASE)
                     substr_le = 'LE_ID="na1"'       
-                    le31 = re.search(substr_le, line)
-                    substr_le = 'LE_ID="NA1"'
-                    le32 = re.search(substr_le, line)   
+                    le3 = re.search(substr_le, line, re.IGNORECASE)  
                     substr_le = 'LE_ID="za1"'       
-                    le41 = re.search(substr_le, line)
-                    substr_le = 'LE_ID="ZA1"'
-                    le42 = re.search(substr_le, line) 
-
-                    if le11 != None or le12 != None:
+                    le4 = re.search(substr_le, line, re.IGNORECASE)
+                    substr_le = 'LE_ID="ke2"'       
+                    le5 = re.search(substr_le, line, re.IGNORECASE)
+                    substr_le = 'LE_ID="ke4"'       
+                    le6 = re.search(substr_le, line, re.IGNORECASE)  
+                    substr_le = 'LE_ID="tz1"'       
+                    le7 = re.search(substr_le, line, re.IGNORECASE)
+#KE2, KE4, TZ1
+                    if le1 != None:
                         le_code = 'UG1'
-                    if le21 != None or le22 != None:
-                        le_code = 'MZ1'                        
-                    if le41 != None or le42 != None:
-                        le_code = 'ZA1'  
-                    if le31 != None or le32 != None:
+                    if le2 != None:
+                        le_code = 'MZ1'                          
+                    if le3 != None:
                         le_code = 'NA1'
+                    if le4 != None:
+                        le_code = 'ZA1'
+                    if le5 != None:
+                        le_code = 'KE2'  
+                    if le6 != None:
+                        le_code = 'KE4'                      
+                    if le7 != None:
+                        le_code = 'TZ1'
 
                     substr1 = 'CCBROADNETWORKBENCHSESSIONTABLEENTITY'       
                     x1 = re.search(substr1, line)
@@ -304,33 +307,25 @@ rdnet_in['LINEREFID'] = rdnet_in['INVENTTRANSID']
 
 if le_code == "ZA1":
     rdnet_in['DESCRIPTION'] = 'BLOEM_PLAN'
-    rdnet_in['FIRSTDRIVER'] = '825196'
-    rdnet_in['FIRSTTRAILER'] = 'ST29PTAIL'
     rdnet_in['SHIPPINGCARRIER'] = '0'
-    rdnet_in['VEHICLEID'] = 'TT4X2TAIL'
-
 elif le_code == "NA1":
     rdnet_in['DESCRIPTION'] = 'Windhoek_PLAN'
-    rdnet_in['FIRSTDRIVER'] = 'NA1-000002'
-    #rdnet_in['FIRSTTRAILER'] = 'LD1001'
-    rdnet_in['FIRSTTRAILER'] = 'TT1001'
     rdnet_in['SHIPPINGCARRIER'] = '0'
-    #rdnet_in['VEHICLEID'] = 'LD1002'
-    rdnet_in['VEHICLEID'] = 'TT1002'
-
 elif le_code == "UG1":
     rdnet_in['DESCRIPTION'] = 'Rwenzori_PLAN'
-    rdnet_in['FIRSTDRIVER'] = 'UG1-000001'
-    rdnet_in['FIRSTTRAILER'] = 'TT1003'
     rdnet_in['SHIPPINGCARRIER'] = 'INTERNAL'
-    rdnet_in['VEHICLEID'] = 'TT1004'    
-    
 elif le_code == "MZ1":
     rdnet_in['DESCRIPTION'] = 'Chimoio_PLAN'
-    rdnet_in['FIRSTDRIVER'] = 'MZ1-000001'
-    rdnet_in['FIRSTTRAILER'] = 'TT1002'
     rdnet_in['SHIPPINGCARRIER'] = '0'
-    rdnet_in['VEHICLEID'] = 'TT1003'    
+elif le_code == "KE2":
+    rdnet_in['DESCRIPTION'] = 'Embakasi_PLAN'
+    rdnet_in['SHIPPINGCARRIER'] = 'INTERNAL'
+elif le_code == "KE4":
+    rdnet_in['DESCRIPTION'] = 'Equator_PLAN'
+    rdnet_in['SHIPPINGCARRIER'] = 'INTERNAL'
+elif le_code == "TZ1":
+    rdnet_in['DESCRIPTION'] = 'DARESSALAAM_REPLENIS'
+    rdnet_in['SHIPPINGCARRIER'] = 'INTERNAL'
     
 else:
     print("No valid legal entity")
@@ -394,6 +389,9 @@ if le_code == "ZA1":
 
 elif le_code == "NA1" or le_code == "UG1" or le_code == "MZ1":
     customers=pd.read_csv("./data/customers/NA1_UG1_MZ1_customers.csv")
+
+elif le_code == "KE4" or le_code == "KE2" or le_code == "TZ1":
+    customers=pd.read_csv("./data/customers/KE2_KE4_TZ1_customers.csv")    
 
 else:
     print("No valid customer master file")
