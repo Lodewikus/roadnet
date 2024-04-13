@@ -1,0 +1,10 @@
+numpy
+requests
+pandas
+openpyxl
+datetime
+lxml
+ipykernel
+tqdm
+pyodbc
+pyarrow
